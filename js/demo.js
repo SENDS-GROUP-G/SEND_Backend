@@ -29,6 +29,7 @@ const renderPost = (postContent) => {
     // Create new div element with class = post for new post:
     const div = document.createElement('div')
     div.classList.add('post')
+    div.classList.add('container-fluid')
     div.innerHTML = postContent;
     postList.appendChild(div)
 }

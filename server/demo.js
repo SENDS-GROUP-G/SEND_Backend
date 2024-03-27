@@ -34,6 +34,13 @@ app.post("/newpost", (req, res) => {
     })
 })
 
+// Get all tables
+app.get("/allData", (req, res) => {
+    const pool = openDb();
+    const allData = {};
+}) 
+
+// Get all posts and user name
 app.get("/", (req,res) => {
     const pool = openDb()
 
