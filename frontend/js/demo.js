@@ -77,15 +77,21 @@ const savePost = async (posts) => {
 submitButton.addEventListener('click', () => {
     const postContent = input.value.trim();
     if (postContent !== '' ) {
-        savePost(postContent).then((json) => {
+        sends.addPost(postContent).then((postContent) => {
+            renderUser(postContent)
+            renderPost(postContent)
+            input.value = '';
+            postWindow.style.display = 'none';
+        })
+       
+       /* savePost(postContent).then((json) => {
             console.log('User wrote:' + postContent);
             renderPost(postContent)
-            renderUser(2)
             // Clear the postcontent value
             input.value = '';
             // close post window
             postWindow.style.display = 'none';
-        })
+        }) */
     }
 })
 

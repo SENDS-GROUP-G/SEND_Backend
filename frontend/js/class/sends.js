@@ -22,12 +22,37 @@ class Posts {
         })
     }
 
+    addPost = (text) => {
+        return new Promise(async(resolve, reject) => {
+            const json = JSON.stringify({postcontent: text});
+            const userid = 2;
+            fetch(this.#backend_url + '/userid=' + userid.toString() + '/newpost', {
+                method: 'post',
+                headers: {'Content-Type':'application/json'},
+                body: json
+            }).then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                resolve(this.#addToArray(json.posid, json.userid, json.username, text))
+            },(error) => {
+                reject(error)
+            })
+        })
+    }
+
     #readJson = (postsAsJson) => {
         postsAsJson.forEach(node => {
-            const post = new Post(node.postid, node.username, node.postcontent);
+            const post = new Post(node.postid, node.userid, node.username, node.postcontent);
             this.#posts.push(post);
         })
     };
+
+    #addToArray = (postid, userid, username, postcontent) => {
+        const post = new Post(postid, userid, username, postcontent)
+        this.#posts.push(post)
+        return post
+    }
+
 }
 
 export { Posts };

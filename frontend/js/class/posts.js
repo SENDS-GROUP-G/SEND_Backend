@@ -1,10 +1,12 @@
 class Post {
     #postId;
+    #userId;
     #userName;
     #postContent;
 
-    constructor(postId, userName, postContent) {
+    constructor(postId, userId, userName, postContent) {
         this.#postId = postId;
+        this.#userId = userId;
         this.#userName = userName;
         this.#postContent = postContent;
     }
@@ -12,6 +14,10 @@ class Post {
     getPostId() {
         return this.#postId
     };
+
+    getPostUserId() {
+        return this.#userId
+    }
 
     getPostUser() {
         return this.#userName
