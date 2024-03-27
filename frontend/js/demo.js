@@ -1,7 +1,10 @@
 const BACKEND_ROOT_URL = 'http://localhost:3001'
+import { Posts } from "./class/sends.js"
+
+const sends = new Posts(BACKEND_ROOT_URL)
+
 
 const postButton = document.querySelector('#postButton')
-//const postList = document.querySelector('ul')
 const postWindow = document.querySelector('#postWindow')
 const closeButton = document.querySelector('.close')
 const submitButton = document.querySelector('#submitButton')
@@ -10,13 +13,6 @@ const postList = document.querySelector('#postList')
 
 // Open postwindow with post button
 postButton.addEventListener('click', () => {
-   /* const postContent = prompt('Write your post:')
-    if (postContent.trim() !== '') {
-        console.log('User wrote: ', postContent)
-        const newPost = document.createElement('li');
-        newPost.innerHTML = postContent
-        postList.appendChild(newPost)
-    } */
     postWindow.style.display = 'block';
 })
 
@@ -30,19 +26,19 @@ const renderPost = (postContent) => {
     const div = document.createElement('div')
     div.classList.add('post')
     div.classList.add('container-fluid')
-    div.innerHTML = postContent;
+    div.innerHTML = postContent.getPostText();
     postList.appendChild(div)
 }
 
 const renderUser = (userName) => {
     const div = document.createElement('div')
     div.classList.add('username')
-    div.innerHTML = userName;
+    div.innerHTML = userName.getPostUser();
     postList.appendChild(div)
 }
 
 const getPosts = async () => {
-    try {
+    /* try {
         const response = await fetch(BACKEND_ROOT_URL)
         const json = await response.json()
         json.forEach(posts => {
@@ -51,13 +47,21 @@ const getPosts = async () => {
         })
     } catch (error) {
         alert("Error retrieving task " + error.message)
-    }
+    } */
+    sends.getPosts().then((posts) => {
+        posts.forEach(post => {
+            renderUser(post)
+            renderPost(post)
+        })
+    }).catch((error) => {
+        alert(error)
+    })
 }
 
 const savePost = async (posts) => {
     try {
         const json = JSON.stringify({postcontent : posts})
-        const response = await fetch(BACKEND_ROOT_URL + '/newpost',{
+        const response = await fetch(BACKEND_ROOT_URL + '/userid=2/newpost',{
             method: 'post',
             headers: {
                 'Content-Type':'application/json'
@@ -76,6 +80,7 @@ submitButton.addEventListener('click', () => {
         savePost(postContent).then((json) => {
             console.log('User wrote:' + postContent);
             renderPost(postContent)
+            renderUser(2)
             // Clear the postcontent value
             input.value = '';
             // close post window
@@ -83,15 +88,5 @@ submitButton.addEventListener('click', () => {
         })
     }
 })
-
-/* <button id="postButton">Post</button>
-        <div id="postWindow" class="modal">
-            <div class="modal-content">
-              <span class="close">&times;</span>
-              <textarea id="postContent" rows="4" cols="50" placeholder="Write your post..."></textarea>
-              <button id="submitButton">Submit</button>
-            </div>
-        </div>
-*/
 
 getPosts()
