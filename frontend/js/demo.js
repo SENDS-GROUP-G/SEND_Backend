@@ -34,11 +34,19 @@ const renderPost = (postContent) => {
     postList.appendChild(div)
 }
 
+const renderUser = (userName) => {
+    const div = document.createElement('div')
+    div.classList.add('username')
+    div.innerHTML = userName;
+    postList.appendChild(div)
+}
+
 const getPosts = async () => {
     try {
         const response = await fetch(BACKEND_ROOT_URL)
         const json = await response.json()
         json.forEach(posts => {
+            renderUser(posts.username)
             renderPost(posts.postcontent)
         })
     } catch (error) {

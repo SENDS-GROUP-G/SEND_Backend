@@ -19,6 +19,7 @@ app.use(express.json())
 
 const port = 3001
 
+// create new post with userid = 2
 app.post("/newpost", (req, res) => {
     const pool = openDb()
     const userid = 2;
@@ -34,6 +35,12 @@ app.post("/newpost", (req, res) => {
     })
 })
 
+// Create new comment with userid = 1
+app.post("/new comment", (req, res) => {
+    const pool = openDB();
+    const userid = 1;
+})
+
 // Get all tables
 app.get("/allData", (req, res) => {
     const pool = openDb();
@@ -44,7 +51,20 @@ app.get("/allData", (req, res) => {
 app.get("/", (req,res) => {
     const pool = openDb()
 
-    pool.query('SELECT postid, username, postcontent FROM posts inner join users on posts.userid = users.userid', (error, result) => {
+    pool.query('SELECT postid, username, postcontent FROM posts inner join users on posts.userid = users.userid', 
+    (error, result) => {
+        if (error) {
+            res.status(500).json({ error: error.message})
+        }
+        res.status(200).json(result.rows)
+    })
+})
+
+// Get all comments
+app.get("/allcomments", (req,res) => {
+    const pool = openDb()
+
+    pool.query('SELECT * FROM comments', (error, result) => {
         if (error) {
             res.status(500).json({ error: error.message})
         }
