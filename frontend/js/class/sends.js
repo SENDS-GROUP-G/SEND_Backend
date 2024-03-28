@@ -1,5 +1,5 @@
 import { Post } from "./posts.js";
-//import { Comment } from "./posts.js"
+import { Comment } from "./posts.js"
 
 class Posts {
     #posts = [];
@@ -32,7 +32,6 @@ class Posts {
                 body: json
             }).then((response) => response.json())
             .then((json) => {
-                console.log(json)
                 resolve(this.#addToArray(json.posid, json.userid, json.username, text))
             },(error) => {
                 reject(error)

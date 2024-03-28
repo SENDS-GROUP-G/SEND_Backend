@@ -22,15 +22,35 @@ closeButton.addEventListener('click', () => {
 })
 
 const renderPost = (postContent) => {
+    // Get postId for each post:
+    const postId = postContent.getPostId();
+    const postUrl = `${BACKEND_ROOT_URL}/postid=${postId}`
+    console.log('postId: ' + postId)
+    console.log(postUrl)
     // Create new div element with class = post for new post:
     const div = document.createElement('div')
     div.classList.add('post')
     div.classList.add('container-fluid')
     div.innerHTML = postContent.getPostText();
+    const p = document.createElement('p')
+    const commentButton = document.createElement('button');
+    commentButton.innerHTML = 'comment'
+
+    // Add event for comment Button:
+    commentButton.addEventListener('click', () => {
+    })
+
+    div.appendChild(p)
+    div.appendChild(commentButton)
     postList.appendChild(div)
 }
 
+
 const renderUser = (userName) => {
+    // Get userid who owns the post
+    const userId = userName.getPostUserId();
+    console.log('userId: ' + userId);
+
     const div = document.createElement('div')
     div.classList.add('username')
     div.innerHTML = userName.getPostUser();
@@ -77,21 +97,12 @@ const savePost = async (posts) => {
 submitButton.addEventListener('click', () => {
     const postContent = input.value.trim();
     if (postContent !== '' ) {
-        sends.addPost(postContent).then((postContent) => {
-            renderUser(postContent)
-            renderPost(postContent)
+        sends.addPost(postContent).then((post) => {
+            renderUser(post)
+            renderPost(post)
             input.value = '';
             postWindow.style.display = 'none';
         })
-       
-       /* savePost(postContent).then((json) => {
-            console.log('User wrote:' + postContent);
-            renderPost(postContent)
-            // Clear the postcontent value
-            input.value = '';
-            // close post window
-            postWindow.style.display = 'none';
-        }) */
     }
 })
 

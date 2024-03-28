@@ -31,6 +31,20 @@ app.get("/", (req,res) => {
     })
 })
 
+// Get a specified post by postid
+app.get("/postid=:postid", (req, res) => {
+    const pool = openDb()
+    const postid = req.params.postid
+    pool.query('SELECT posts.postid, posts.userid, users.username, posts.postcontent FROM posts INNER JOIN users ON posts.userid = users.userid WHERE posts.postid=$1',
+    [postid],
+    (error, result) => {
+        if (error) {
+            res.status(500).json({ error: error.message})
+        }
+        res.status(200).json(result.rows)       
+    })
+})
+
 // create new post with userid = 2
 app.post("/userid=:userid/newpost", (req, res) => {
     const pool = openDb()
@@ -48,9 +62,10 @@ app.post("/userid=:userid/newpost", (req, res) => {
 })
 
 // Create new comment with userid = 1
-app.post("/newcomment", (req, res) => {
+app.post("/postid=:postid/newcomment", (req, res) => {
     const pool = openDB();
     const userid = 1;
+    
 })
 
 /*/ Get all tables
