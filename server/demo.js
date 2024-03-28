@@ -16,6 +16,7 @@ const openDb = () => {
 const app = express()
 app.use(cors())
 app.use(express.json())
+//app.use(express.urlencoded({extended: false}));
 
 const port = 3001
 
@@ -63,7 +64,7 @@ app.post("/userid=:userid/newpost", (req, res) => {
 
 // Create new comment with userid = 1
 app.post("/postid=:postid/newcomment", (req, res) => {
-    const pool = openDB();
+    const pool = openDb();
     const userid = 1;
     const postid = req.params.postid;
     pool.query('INSERT INTO comments (postid, userid, commentcontent) VALUES ($1, $2, $3)',
@@ -97,3 +98,17 @@ app.get("/allcomments", (req,res) => {
 })
 
 app.listen(port)
+
+
+postRouter.put('/posts/:id', async (req, res) => {
+    const postId = Number(req.params.id); // Corrected
+    const { postcontent } = req.body;
+
+    try {
+        const result = await query('UPDATE posts SET postcontent = $1 WHERE postid = $2', [postcontent, postId]);
+        //update posts set postcontent = 'hello tam' where postid = 1
+        res.status(200).json({postid: result.rows[0].postid})
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
