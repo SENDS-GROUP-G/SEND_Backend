@@ -5,6 +5,10 @@ GET http://localhost:3001
 POST http://localhost:3001/newpost HTTP/1.1
 Content-Type: application/json
 
+### Add new comment
+POST http://localhost:3001//postid=:postid/newcomment HTTP/1.1
+Content-Type: application/json
+
 {
     "description": "Test from REST Client"
 }

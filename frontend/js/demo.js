@@ -38,6 +38,14 @@ const renderPost = (postContent) => {
 
     // Add event for comment Button:
     commentButton.addEventListener('click', () => {
+        const textArea = document.createElement('textarea');
+        textArea.setAttribute('placeholder', 'Type your comment here...');
+        div.appendChild(textArea)
+        textArea.focus()
+        const commentTextarea = textArea;
+        commentTextarea.addEventListener('blur', () => {
+            div.removeChild(commentTextarea)
+        })
     })
 
     div.appendChild(p)
@@ -69,6 +77,8 @@ const getPosts = async () => {
         alert("Error retrieving task " + error.message)
     } */
     sends.getPosts().then((posts) => {
+        // Get posts in reversed order:
+        posts.reverse();
         posts.forEach(post => {
             renderUser(post)
             renderPost(post)

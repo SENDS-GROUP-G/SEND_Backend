@@ -65,7 +65,16 @@ app.post("/userid=:userid/newpost", (req, res) => {
 app.post("/postid=:postid/newcomment", (req, res) => {
     const pool = openDB();
     const userid = 1;
-    
+    const postid = req.params.postid;
+    pool.query('INSERT INTO comments (postid, userid, commentcontent) VALUES ($1, $2, $3)',
+    [postid, userid, req.body.commentcontent],
+    (error, result) => {
+        if (error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(200).json({ commentid : result.rows[0].commentid })
+        }        
+    })  
 })
 
 /*/ Get all tables
