@@ -16,7 +16,7 @@ const openDb = () => {
 const app = express()
 app.use(cors())
 app.use(express.json())
-//app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false}));
 
 const port = 3001
 
@@ -111,6 +111,32 @@ app.put('/postid=:postid/edit', (req,res) => {
             res.status(500).json({ error: error.message })
         }
             res.status(200).json({ postid: result.rows[0].postid, postcontent: postContent })
+    })
+})
+
+// Delete a post
+app.delete("/delete/postid=:postid", async(req, res) => {
+    const pool = openDb();
+    const postId = parseInt(req.params.postid);
+    pool.query('DELETE FROM posts WHERE postid = $1',
+    [postId], (error, result) => {
+        if (error) {
+            res.status(500).json({error: error.message})
+        }
+            res.status(200).json({ postid: postId})
+    })
+})
+
+// Delete a post
+app.delete("/delete/commentid=:commentid", async(req, res) => {
+    const pool = openDb();
+    const commentId = parseInt(req.params.commentid);
+    pool.query('DELETE FROM comments WHERE commentid = $1',
+    [commentId], (error, result) => {
+        if (error) {
+            res.status(500).json({error: error.message})
+        }
+            res.status(200).json({ commentid: commentId})
     })
 })
 

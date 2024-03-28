@@ -25,3 +25,8 @@ Content-Type: application/json
     "postcontent": "Updated post content"
 }
 
+### Delete a post
+DELETE http://localhost:3001/delete/postid=20 HTTP/1.1
+
+### Delete a comment
+DELETE http://localhost:3001/delete/commentid=10 HTTP/1.1
