@@ -1,6 +1,12 @@
 ### Get all posts
 GET http://localhost:3001
 
+### Get a post by postid
+GET http://localhost:3001/search/postid=3
+
+### Get all comments
+GET http://localhost:3001/allcomments
+
 ### Upload a new post
 POST http://localhost:3001/userid=2/newpost HTTP/1.1
 Content-Type: application/json
@@ -18,11 +24,19 @@ Content-Type: application/json
 }
 
 ### Edit a post
-PUT http://localhost:3001/postid=2/edit HTTP/1.1
+PUT http://localhost:3001/edit/postid=2 HTTP/1.1
 Content-Type: application/json
 
 {
     "postcontent": "Updated post content"
+}
+
+### Edit a comment
+PUT http://localhost:3001/edit/commentid=3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "commentcontent": "Edited comment content"
 }
 
 ### Delete a post
