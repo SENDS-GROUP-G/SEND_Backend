@@ -62,22 +62,6 @@ app.post("/userid=:userid/newpost", (req, res) => {
     })
 })
 
-// Create new comment with userid = 1
-app.post("/postid=:postid/newcomment", (req, res) => {
-    const pool = openDb();
-    const userid = 1;
-    const postid = req.params.postid;
-    pool.query('INSERT INTO comments (postid, userid, commentcontent) VALUES ($1, $2, $3)',
-    [postid, userid, req.body.commentcontent],
-    (error, result) => {
-        if (error) {
-            res.status(500).json({ error: error.message })
-        } else {
-            res.status(200).json({ commentid : result.rows[0].commentid })
-        }        
-    })  
-})
-
 /*/ Get all tables
 app.get("/allData", (req, res) => {
     const pool = openDb();
@@ -97,18 +81,54 @@ app.get("/allcomments", (req,res) => {
     })
 })
 
-app.listen(port)
+// WORK Create new comment with userid = 1
+app.post("/postid=:postid/newcomment", (req, res) => {
+    const pool = openDb();
+    const userid = 1;
+    const postid = Number(req.params.postid);
+    const commentContent = req.body.commentcontent
+    pool.query('INSERT INTO comments (postid, userid, commentcontent) VALUES ($1, $2, $3) RETURNING commentid, postid, userid, commentcontent',
+    [postid, userid, commentContent],
+    (error, result) => {
+        if (error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(200).json({ commentid : result.rows[0].commentid, commentcontent: commentContent })
+        }        
+    })  
+})
 
+// WORK Edit a post
+app.put('/update/:postid', (req,res) => {
+    const pool = openDb()
+    const postId = Number(req.params.postid); // Corrected
+    const postContent = req.body.postcontent;
+    pool.query('UPDATE posts SET postcontent = $1 WHERE postid = $2 RETURNING postid, postcontent', 
+    [postContent, postId], 
+    (error, result) => {
+        if (error) {    
+            res.status(500).json({ error: error.message })
+        }
+            res.status(200).json({ postid: result.rows[0].postid, postcontent: postContent })
+    })
+})
 
-postRouter.put('/posts/:id', async (req, res) => {
-    const postId = Number(req.params.id); // Corrected
+/*
+postRouter.put('/posts/:postid', async (req, res) => {
+    const postId = Number(req.params.postid); // Corrected
     const { postcontent } = req.body;
 
     try {
-        const result = await query('UPDATE posts SET postcontent = $1 WHERE postid = $2', [postcontent, postId]);
+        const result = await query('UPDATE posts SET postcontent = $1 WHERE postid = $2 RETURNING postid, postcontent', [postcontent, postId]);
         //update posts set postcontent = 'hello tam' where postid = 1
         res.status(200).json({postid: result.rows[0].postid})
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
+*/
+
+
+app.listen(port)
+
+
