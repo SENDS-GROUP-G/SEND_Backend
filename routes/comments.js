@@ -19,4 +19,17 @@ commentRouter.post("/posts/:post_id/comments", async(req, res) => {
     }
 })
 
+// Delete a comment by ID
+commentRouter.delete("/posts/:post_id/comments/:comment_id", async(req, res) => {
+    const comment_id = Number(req.params.comment_id);
+    try {
+        const result = await query('DELETE FROM comments WHERE comment_id = $1', [comment_id]);
+        res.status(200).json({comment_id: comment_id});
+        } catch (error) {
+        console.log(error);
+        res.statusMessage = error;
+        res.status(500).json({error: error});
+    }
+});
+
 module.exports = { commentRouter } 
