@@ -20,5 +20,19 @@ postRouter.post("/posts", async(req,res) => {
     }
 })
 
+// Delete a post by ID
+postRouter.delete("/posts/:post_id", async(req, res) => {
+    const post_id = Number(req.params.post_id);
+    try {
+        await query('DELETE FROM comments WHERE post_id = $1', [post_id]);
+        const result = await query('DELETE FROM posts WHERE post_id = $1', [post_id]);
+        res.status(200).json({post_id: post_id});
+        } catch (error) {
+        console.log(error);
+        res.statusMessage = error;
+        res.status(500).json({error: error});
+    }
+})
+
 
 module.exports = { postRouter } 
