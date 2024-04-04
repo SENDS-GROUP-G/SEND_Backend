@@ -4,8 +4,8 @@ const { query } = require('../helpers/db.js');
 const commentRouter = express.Router()
 
 // Get all comments
-commentRouter.get('/posts/:postId/comments', async (req, res) => {
-  const id = req.params.postId;
+commentRouter.get('/posts/:post_id/comments', async (req, res) => {
+  const id = req.params.post_id;
   try {
     const result = await query('SELECT * FROM comments WHERE post_id =' + id );
     const rows = result.rows ? result.rows : [];
@@ -30,6 +30,20 @@ commentRouter.post("/posts/:post_id/comments", async(req, res) => {
         res.status(500).json({ error : error });
     }
 })
+// Edit comment
+
+commentRouter.put('/posts/:post_id/comments/:comment_id', async (req, res) => {
+  const comment_id = req.params.comment_id;
+  const comment_content = req.body.comment_content;
+
+  try {
+      const result = await query('UPDATE comments SET comment_content = $1 WHERE comment_id = $2 RETURNING *', [comment_content, comment_id]);
+      res.status(200).json(result.rows[0]);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
 
 // Delete a comment by ID
 commentRouter.delete("/posts/:post_id/comments/:comment_id", async(req, res) => {
