@@ -31,6 +31,19 @@ postRouter.post("/posts", async(req,res) => {
         res.status(500).json({error: error.message})
     }
 })
+// Edit post
+
+postRouter.put('/posts/:post_id', async (req, res) => {
+  const post_id = Number(req.params.post_id);
+  const post_content  = req.body.post_content;
+
+  try {
+      const result = await query('UPDATE posts SET post_content = $1 WHERE post_id = $2 RETURNING *', [post_content, post_id]);
+      res.status(200).json({postid: result.rows[0].postid})
+  } catch (error) {
+      res.status(500).json({ error: error.message});
+}
+});
 
 // Delete a post by ID
 postRouter.delete("/posts/:post_id", async(req, res) => {
