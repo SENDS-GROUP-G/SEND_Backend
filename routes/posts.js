@@ -5,8 +5,6 @@ const postRouter = express.Router()
 
 // Get all posts
 postRouter.get("/", async (req, res) => {
-  console.log('123');
-
   try {
     const result = await query('SELECT * FROM posts');
     const rows = result.rows ? result.rows: [];
@@ -20,28 +18,37 @@ postRouter.get("/", async (req, res) => {
 postRouter.post("/posts", async(req,res) => {
     const userId = parseInt(req.body.user_id);
     const postContent = req.body.post_content;
+    const title = req.body.title;
     try {
-        const result = await query('INSERT INTO posts (user_id, post_content) VALUES ($1, $2) RETURNING post_id, post_content, user_id',
-        [userId, postContent]);
+        const result = await query('INSERT INTO posts (user_id, title, post_content) VALUES ($1, $2, $3) RETURNING post_id, title, post_content, user_id',
+        [userId, title, postContent]);
         const rows = result.rows ? result.rows : [];
-        res.status(200).json({ post_id : rows[0].post_id , user_id: userId , post_content: postContent })
+        res.status(200).json({ post_id : rows[0].post_id , user_id: userId, title : title, post_content: postContent })
     } catch (error) {
         console.log(error)
         res.statusMessage = error
         res.status(500).json({error: error.message})
     }
 })
-// Edit post
 
+// Edit post
 postRouter.put('/posts/:post_id', async (req, res) => {
   const post_id = Number(req.params.post_id);
   const post_content  = req.body.post_content;
-
+  const title = req.body.title;
   try {
-      const result = await query('UPDATE posts SET post_content = $1 WHERE post_id = $2 RETURNING *', [post_content, post_id]);
-      res.status(200).json({postid: result.rows[0].postid})
+      const result = await query(
+      'UPDATE posts SET title =$1, post_content =$2 WHERE post_id =$3 RETURNING *', 
+      [title, post_content, post_id]);
+      const rows = result.rows ? result.rows : [];
+      res.status(200).json({ 
+          post_id: rows[0].post_id, 
+          title: rows[0].title, 
+          post_content: rows[0].post_content 
+        })
   } catch (error) {
-      res.status(500).json({ error: error.message});
+      console.log( error )
+      res.status(500).json({error: error.message});
 }
 });
 
