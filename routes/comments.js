@@ -30,12 +30,11 @@ commentRouter.post("/posts/:post_id/comments", async(req, res) => {
         res.status(500).json({ error : error });
     }
 })
-// Edit comment
 
+// Edit a comment
 commentRouter.put('/posts/:post_id/comments/:comment_id', async (req, res) => {
   const comment_id = req.params.comment_id;
   const comment_content = req.body.comment_content;
-
   try {
       const result = await query('UPDATE comments SET comment_content = $1 WHERE comment_id = $2 RETURNING *', [comment_content, comment_id]);
       res.status(200).json(result.rows[0]);

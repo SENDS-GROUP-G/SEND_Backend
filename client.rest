@@ -1,3 +1,20 @@
+### Get 
+GET http://localhost:3001
+
+
+### Fetch comment
+GET http://localhost:3001/posts/1/comments
+
+### Add a new post
+POST http://localhost:3001/posts HTTP/1.1
+Content-Type: application/json
+
+{
+    "user_id": 2,
+    "title" : "New test post",
+    "post_content": "Test from REST Client"
+}
+
 ### Add new comment
 POST http://localhost:3001/posts/2/comments HTTP/1.1
 Content-Type: application/json
@@ -7,6 +24,24 @@ Content-Type: application/json
     "comment_content": "Updated new comment content"
 }
 
+### Edit a post
+PUT http://localhost:3001/posts/1 HTTP/1.1
+Content-Type: application/json
+
+{   
+    "user_id" : 1,
+    "title" : "Updated title",
+    "post_content": "Updated new post content"
+}
+
+### Edit a comment
+PUT http://localhost:3001/posts/1/comments/1
+Content-Type: application/json
+
+{
+    "user_id" : 2,
+    "comment_content": "Update my comment"
+}
 
 ### Delete a post
 DELETE http://localhost:3001/posts/1 HTTP/1.1
@@ -16,11 +51,3 @@ Content-Type: application/json
 DELETE http://localhost:3001/posts/1/comments/2 HTTP/1.1
 Content-Type: application/json
 
-### Post a new post
-POST http://localhost:3001/posts HTTP/1.1
-Content-Type: application/json
-
-{
-    "user_id": 2,
-    "post_content": "Test from REST Client"
-}
