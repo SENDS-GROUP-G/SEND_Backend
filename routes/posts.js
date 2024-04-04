@@ -48,7 +48,11 @@ postRouter.put('/posts/:post_id', async (req, res) => {
 // Delete a post by ID
 postRouter.delete("/posts/:post_id", async(req, res) => {
     const post_id = Number(req.params.post_id);
+    //const comment_id = Number(req.params.comment_id);
     try {
+        await query('DELETE FROM replies WHERE comment_id = (SELECT comment_id FROM comments WHERE post_id = $1)', [post_id]);
+        await query('DELETE FROM comment_reacts WHERE comment_id = (SELECT comment_id FROM comments WHERE post_id = $1)', [post_id]);  
+        await query('DELETE FROM post_reacts WHERE post_id = $1', [post_id]);
         await query('DELETE FROM comments WHERE post_id = $1', [post_id]);
         const result = await query('DELETE FROM posts WHERE post_id = $1', [post_id]);
         res.status(200).json({post_id: post_id});
