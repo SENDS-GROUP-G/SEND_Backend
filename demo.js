@@ -6,6 +6,7 @@ const cors = require('cors')
 const { postRouter } = require('./routes/posts.js');
 const { commentRouter } = require('./routes/comments.js');
 const { userRouter } = require('./routes/user.js');
+const { reactRouter }  = require('./routes/react.js');
 
 const app = express()
 app.use(cors())
@@ -14,6 +15,7 @@ app.use(express.urlencoded({extended: false}));
 app.use('/',postRouter)
 app.use('/',commentRouter)
 app.use('/',userRouter)
+app.use('/', reactRouter);
 
 const port = process.env.PORT;
 
