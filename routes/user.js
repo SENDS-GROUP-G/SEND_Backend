@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 const userRouter = express.Router();
 
-
+//Register
 userRouter.post("/register", async (req, res) => {
     bcrypt.hash(req.body.password, 10, async (err, hash) => {
         if(!err) {
@@ -27,4 +27,42 @@ userRouter.post("/register", async (req, res) => {
         }
     });
 });
+
+//Login to an account:
+userRouter.post("/users/login", async(req,res) => {
+    console.log(req.body);
+    try {
+        const sql = "SELECT * FROM users WHERE email=$1";
+        const result = await query(sql,[req.body.email]);
+        console.log(result.rowCount)
+        console.log(req.body.password);
+        console.log("This " + result.rows[0].password);
+        if (result.rowCount === 1) {
+            bcrypt.compare(req.body.password,result.rows[0].password, (err, bcrypt_res) => {
+                if (!err) {
+                    console.log('ok')
+                    console.log(bcrypt_res)
+                    if (bcrypt_res === true) {
+                        const user = result.rows[0];
+                        res.status(200).json({ "user_id": user.user_id,"email":user.email })
+                    } else {
+                        res.statusMessage = 'Invalid login';
+                        res.status(401).json({ error: 'Invalid login '})
+                    }
+                } else {
+                    res.statusMessage = err;
+                    res.status(500).json({error: err})
+                }
+            })
+        } else {
+            res.statusMessage = 'Invalid login';
+            res.status(401).json({error: 'Invalid login'})
+        }
+    } catch (error) {
+        res.statusMessage = err;
+        res.status(500).json({error: err})
+    }
+})
+
+
 module.exports = { userRouter };
