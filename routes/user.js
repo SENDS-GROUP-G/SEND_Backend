@@ -44,7 +44,7 @@ userRouter.post("/users/login", async(req,res) => {
                     console.log(bcrypt_res)
                     if (bcrypt_res === true) {
                         const user = result.rows[0];
-                        res.status(200).json({ "user_id": user.user_id,"email":user.email })
+                        res.status(200).json({ "user_id": user.user_id,"email":user.email, "user_name": user.user_name })
                     } else {
                         res.statusMessage = 'Invalid login';
                         res.status(401).json({ error: 'Invalid login '})

@@ -6,9 +6,34 @@ POST http://localhost:3001/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "greycat@foo.com",
-    "user_name" : "greycat",
+    "email" : "browncat@foo.com",
+    "user_name" : "browncat",
     "password" : "meow123"
+}
+
+### Login an account:
+POST http://localhost:3001/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email" : "browncat@foo.com",
+    "password" : "meow123"
+}
+
+### Search an username:
+GET http://localhost:3001/search/user HTTP/1.1
+Content-Type: application/json
+
+{
+    "user_name" : "ginger"
+}
+
+### Search a post title:
+GET http://localhost:3001/search/title HTTP/1.1
+Content-Type: application/json
+
+{
+    "title" : "test"
 }
 
 ### Login an account:
