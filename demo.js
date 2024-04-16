@@ -8,6 +8,7 @@ const { commentRouter } = require('./routes/comments.js');
 const { userRouter } = require('./routes/user.js');
 const { reactRouter }  = require('./routes/react.js');
 const { searchRouter } = require('./routes/search.js');
+const { deleteRouter } = require('./routes/delete.js');
 
 const app = express()
 app.use(cors())
@@ -18,6 +19,7 @@ app.use('/',commentRouter)
 app.use('/',userRouter)
 app.use('/', reactRouter);
 app.use('/', searchRouter);
+app.use('/', deleteRouter);
 
 const port = process.env.PORT;
 
