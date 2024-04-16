@@ -3,10 +3,11 @@ const { query } = require('../helpers/db.js');
 
 const searchRouter = express.Router()
 
-searchRouter.get('/search/title', async (req, res) => {
-    const title = req.body.title;
+searchRouter.get('/search/posts/:title', async (req, res) => {
+    const title = req.params.title.toString();
     try {
-        const result = await query('SELECT * FROM posts WHERE title ILIKE $1', ['%' + title + '%']);
+        const sql = 'SELECT posts.title, posts.post_content, posts.saved, users.user_name FROM posts INNER JOIN users ON posts.user_id=users.user_id WHERE posts.title ILIKE $1';
+        const result = await query(sql, ['%' + title + '%']);
         const rows = result.rows ? result.rows : [];
         res.status(200).json(rows);
     } catch (error) {
@@ -14,10 +15,10 @@ searchRouter.get('/search/title', async (req, res) => {
     }
 });
 
-searchRouter.get('/search/user', async (req, res) => {
-    const user_name = req.body.name;
+searchRouter.get('/search/users/:user_name', async (req, res) => {
+    const user_name = req.params.user_name.toString();
     try {
-        const result = await query('SELECT user_name FROM users LEFT JOIN posts on posts.user_id = users.user_id WHERE user_name ILIKE $1', [user_name + '%']);
+        const result = await query('SELECT user_id, user_name, email FROM users WHERE user_name ILIKE $1', [user_name + '%']);
         const rows = result.rows ? result.rows : [];
         res.status(200).json(rows);
     } catch (error) {
