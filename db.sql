@@ -180,3 +180,17 @@ insert into
     replies (reply, comment_id, user_id)
 values
     ('Test', 1, 3);    
+
+create table feedbacks (
+    id serial primary key,
+    title varchar(100) not null,
+    content text not null,
+    saved timestamp default current_timestamp,
+    user_id int not null,
+    constraint fk_users foreign key (user_id) references users(user_id)
+);
+
+insert into
+    feedbacks (title, content, user_id)
+values
+    ('Test feedback', 'This is a test', 3);
