@@ -44,7 +44,7 @@ userRouter.post("/users/login", async(req,res) => {
                     console.log(bcrypt_res)
                     if (bcrypt_res === true) {
                         const user = result.rows[0];
-                        res.status(200).json({ "user_id": user.user_id,"email":user.email, "user_name": user.user_name })
+                        res.status(200).json({ "user_id": user.user_id,"email": user.email, "user_name": user.user_name })
                     } else {
                         res.statusMessage = 'Invalid login';
                         res.status(401).json({ error: 'Invalid login '})
@@ -59,10 +59,40 @@ userRouter.post("/users/login", async(req,res) => {
             res.status(401).json({error: 'Invalid login'})
         }
     } catch (error) {
-        res.statusMessage = err;
-        res.status(500).json({error: err})
+        res.statusMessage = error;
+        res.status(500).json({error: error})
     }
 })
 
+// Change password
+userRouter.put("/users/password", async(req, res) => {
+    console.log(req.body);
+    try {
+        const sql = 'SELECT * FROM users WHERE email=$1';
+        const result = await query(sql,[req.body.email]);
+        console.log(result.rowCount);
+        console.log(req.body.password);
+        console.log("This : " + result.rows[0].password);
+        
+        if (result.rowCount === 1) {
+            const user = result.rows[0];
+            const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+            if (passwordMatch) {
+                const hashedPassword = await bcrypt.hash(req.body.new_pass, 10);
+                const new_sql = 'UPDATE users SET password = $1 WHERE email = $2 RETURNING *';
+                const newResult = await query(new_sql, [hashedPassword, req.body.email]);
+                console.log(newResult.rows[0])
+                res.status(200).json({ "user_name": newResult.rows[0].user_name, message: 'Password updated successfully' });
+            } else {
+                res.status(401).json({ error: 'Invalid login' });
+            }
+        } else {
+            res.status(401).json({ error: 'Invalid login' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 module.exports = { userRouter };
