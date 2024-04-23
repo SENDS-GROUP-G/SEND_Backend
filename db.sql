@@ -170,16 +170,7 @@ create table replies (
     constraint fk_comments foreign key (comment_id) references comments(comment_id),
     user_id int not null,
     constraint fk_users foreign key (user_id) references users(user_id)
-);
-
-insert into
-    replies (reply, comment_id, user_id)
-values
-    ('Hei hei', 1, 2);
-insert into
-    replies (reply, comment_id, user_id)
-values
-    ('Test', 1, 3);    
+);   
 
 create table feedbacks (
     id serial primary key,
