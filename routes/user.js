@@ -95,4 +95,20 @@ userRouter.put("/users/password", async(req, res) => {
     }
 });
 
+// User page 
+
+userRouter.get("/user/:user_id", async (req, res) => {
+    const user_id = Number(req.params.user_id);
+    try {
+        const userResult = await query('SELECT user_name, email FROM users WHERE user_id = $1', [user_id]);
+        const postResult = await query('SELECT post_id, title, post_content FROM posts WHERE user_id = $1', [user_id]);
+        
+        const userData = userResult.rows ? userResult.rows[0] : {};
+        const posts = postResult.rows ? postResult.rows : [];
+
+        res.status(200).json({ user: userData, posts: posts });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 module.exports = { userRouter };
