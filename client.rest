@@ -6,9 +6,9 @@ POST http://localhost:3001/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "testowl@foo.com",
-    "user_name" : "test_owl",
-    "password" : "meow124"
+    "email" : "whiteowl@foo.com",
+    "user_name" : "whiteowl",
+    "password" : "meow125"
 }
 
 ### Login an account:
@@ -16,8 +16,18 @@ POST http://localhost:3001/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "browncat@foo.com",
-    "password" : "meow123"
+    "email" : "whiteowl@foo.com",
+    "password" : "test123"
+}
+
+### Change password of an account (switching between these two passwords):
+PUT http://localhost:3001/users/password HTTP/1.1
+Content-Type: application/json
+
+{
+    "email" : "whiteowl@foo.com",
+    "password" : "wowwow123",
+    "new_pass" : "test123"
 }
 
 ### Search an username:
@@ -35,6 +45,7 @@ Content-Type: application/json
     "email" : "greycat@foo.com",
     "password" : "meow123"
 }
+
 
 ### Fetch comment
 GET http://localhost:3001/posts/1/comments
