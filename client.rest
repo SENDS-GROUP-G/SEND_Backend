@@ -6,17 +6,17 @@ POST http://localhost:3001/register HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "whiteowl@foo.com",
-    "user_name" : "whiteowl",
-    "password" : "test123"
+    "email" : "meocam@foo.com",
+    "user_name" : "meocam",
+    "password" : "123456789"
 }
 
 ### Delete an account (check user_id before running)
-DELETE http://localhost:3001/delete/users/19 HTTP/1.1
+DELETE http://localhost:3001/delete/users/23 HTTP/1.1
 Content-Type: application/json
 
 {
-    "password" : "test123"
+    "password" : "1234567890"
 }
 
 ### Login an account (check account existence before running):
@@ -24,8 +24,8 @@ POST http://localhost:3001/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "whiteowl@foo.com",
-    "password" : "test125"
+    "email" : "meocam@foo.com",
+    "password" : "123456789"
 }
 
 ### Change password of an account (switching between these two passwords):
@@ -33,9 +33,9 @@ PUT http://localhost:3001/users/password HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "whiteowl@foo.com",
-    "password" : "test123",
-    "new_pass" : "test125"
+    "email" : "meocam@foo.com",
+    "password" : "123456789",
+    "new_pass" : "1234567890"
 }
 
 ### Search an username:
@@ -43,17 +43,6 @@ GET http://localhost:3001/search/users/ginger HTTP/1.1
 
 ### Search a post title:
 GET http://localhost:3001/search/posts/tes HTTP/1.1
-
-
-### Login an account:
-POST http://localhost:3001/users/login HTTP/1.1
-Content-Type: application/json
-
-{
-    "email" : "greycat@foo.com",
-    "password" : "meow123"
-}
-
 
 ### Fetch comment
 GET http://localhost:3001/posts/1/comments
@@ -63,17 +52,17 @@ POST http://localhost:3001/posts HTTP/1.1
 Content-Type: application/json
 
 {
-    "user_id": 19,
+    "user_id": 23,
     "title" : "New test post",
     "post_content": "Test from REST Client"
 }
 
 ### Add new comment
-POST http://localhost:3001/posts/2/comments HTTP/1.1
+POST http://localhost:3001/posts/3/comments HTTP/1.1
 Content-Type: application/json
 
 {
-    "user_id" : 19,
+    "user_id" : 23,
     "comment_content": "Updated new comment content"
 }
 
@@ -108,12 +97,12 @@ Content-Type: application/json
 GET http://localhost:3001/posts/1/reacts HTTP/1.1
 
 ### Hit a reaction to a post:
-POST http://localhost:3001/posts/1/reacts HTTP/1.1
+POST http://localhost:3001/posts/2/reacts HTTP/1.1
 Content-Type: application/json
 
 {
     "react_id": 1,
-    "user_id": 5
+    "user_id": 23
 }
 
 ### Delete a reaction to a post:
