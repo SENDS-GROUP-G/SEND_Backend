@@ -84,10 +84,10 @@ userRouter.put("/users/password", async(req, res) => {
                 console.log(newResult.rows[0])
                 res.status(200).json({ "user_name": newResult.rows[0].user_name, message: 'Password updated successfully' });
             } else {
-                res.status(401).json({ error: 'Invalid login' });
+                res.status(401).json({ error: 'Incorrect password' });
             }
         } else {
-            res.status(401).json({ error: 'Invalid login' });
+            res.status(401).json({ error: 'Email not found' });
         }
     } catch (error) {
         console.error(error);
