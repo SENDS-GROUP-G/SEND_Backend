@@ -6,6 +6,7 @@ const deleteRouter = express.Router();
 
 deleteRouter.delete("/delete/users/:user_id", async(req, res) => {
     const userId = parseInt(req.params.user_id);
+    console.log(userId);
     try {
         const sql = 'SELECT * FROM users WHERE user_id = $1';
         const data = await query(sql,[userId]);

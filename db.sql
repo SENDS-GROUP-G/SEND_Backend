@@ -149,18 +149,6 @@ create table comment_reacts (
     saved timestamp default current_timestamp
 );
 
-insert into 
-    comment_reacts (react_id, comment_id, user_id)
-values
-    (1, 1, 1);
-insert into 
-    comment_reacts (react_id, comment_id, user_id)
-values
-    (1, 1, 2);
-insert into 
-    comment_reacts (react_id, comment_id, user_id)
-values
-    (1, 1, 3);
 
 create table replies (
     id serial primary key,
