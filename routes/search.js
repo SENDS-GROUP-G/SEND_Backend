@@ -6,7 +6,7 @@ const searchRouter = express.Router()
 searchRouter.get('/search/posts/:title', async (req, res) => {
     const title = req.params.title.toString();
     try {
-        const sql = 'SELECT posts.title, posts.post_content, posts.saved, users.user_name FROM posts INNER JOIN users ON posts.user_id=users.user_id WHERE posts.title ILIKE $1';
+        const sql = 'SELECT posts.post_id, posts.title, posts.post_content, posts.saved, users.user_name FROM posts INNER JOIN users ON posts.user_id=users.user_id WHERE posts.title ILIKE $1';
         const result = await query(sql, ['%' + title + '%']);
         const rows = result.rows ? result.rows : [];
         res.status(200).json(rows);
