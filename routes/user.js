@@ -68,8 +68,8 @@ userRouter.post("/users/login", async(req,res) => {
 userRouter.put("/users/password", async(req, res) => {
     console.log(req.body);
     try {
-        const sql = 'SELECT * FROM users WHERE email=$1';
-        const result = await query(sql,[req.body.email]);
+        const sql = 'SELECT * FROM users WHERE user_id=$1';
+        const result = await query(sql,[req.body.user_id]);
         console.log(result.rowCount);
         console.log(req.body.password);
         console.log("This : " + result.rows[0].password);
@@ -79,15 +79,15 @@ userRouter.put("/users/password", async(req, res) => {
             const passwordMatch = await bcrypt.compare(req.body.password, user.password);
             if (passwordMatch) {
                 const hashedPassword = await bcrypt.hash(req.body.new_pass, 10);
-                const new_sql = 'UPDATE users SET password = $1 WHERE email = $2 RETURNING *';
-                const newResult = await query(new_sql, [hashedPassword, req.body.email]);
+                const new_sql = 'UPDATE users SET password = $1 WHERE user_id = $2 RETURNING *';
+                const newResult = await query(new_sql, [hashedPassword, req.body.user_id]);
                 console.log(newResult.rows[0])
                 res.status(200).json({ "user_name": newResult.rows[0].user_name, message: 'Password updated successfully' });
             } else {
                 res.status(401).json({ error: 'Incorrect password' });
             }
         } else {
-            res.status(401).json({ error: 'Email not found' });
+            res.status(401).json({ error: 'User ID not found' });
         }
     } catch (error) {
         console.error(error);
@@ -107,8 +107,8 @@ userRouter.get("/user/:user_id", async (req, res) => {
 
         res.status(200).json({ user: userData, posts: postIds });
     } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+        res.status(500).json({ error: error.message });
+    }
 });
 
 module.exports = { userRouter };
