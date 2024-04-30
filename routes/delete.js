@@ -28,7 +28,6 @@ async function deletePosts(id) {
 }
 
 
-
 deleteRouter.delete("/delete/users/:user_id", async(req, res) => {
     const userId = parseInt(req.params.user_id);
     console.log(userId);
