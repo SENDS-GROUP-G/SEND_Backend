@@ -6,7 +6,8 @@ const postRouter = express.Router()
 // Get all posts
 postRouter.get("/", async (req, res) => {
   try {
-    const result = await query('SELECT * FROM posts');
+    sql = 'SELECT posts.post_id, posts.title, posts.saved, posts.user_id, users.user_name, users.avatar, posts.post_content FROM posts JOIN users ON posts.user_id = users.user_id';
+    const result = await query(sql);
     const rows = result.rows ? result.rows: [];
     res.status(200).json(rows);
   } catch (error) {
