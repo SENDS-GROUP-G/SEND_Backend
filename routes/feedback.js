@@ -19,11 +19,12 @@ feedbackRouter.get('/feedbacks', async(req, res) => {
 // Post a feedback:
 feedbackRouter.post('/feedbacks', async(req, res) => {
     try {
+        const rating = req.body.rate;
         const title = req.body.title;
         const content = req.body.content;
         const user = req.body.user_id;
-        const sql = 'INSERT INTO feedbacks(title, content, user_id) VALUES ($1, $2, $3) RETURNING title, content, user_id';
-        const result = await query(sql, [title, content, user]);
+        const sql = 'INSERT INTO feedbacks(rate, title, content, user_id) VALUES ($1, $2, $3, $4) RETURNING rate, title, content, user_id';
+        const result = await query(sql, [rating, title, content, user]);
         const rows = result.rows ? result.rows : [];
         res.status(200).json({ id: rows[0].id });
     } catch (error) {

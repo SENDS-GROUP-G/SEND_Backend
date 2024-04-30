@@ -12,8 +12,8 @@ userRouter.post("/register", async (req, res) => {
             const email = req.body.email;
             const password = hash;
             try {
-                const result = await query('INSERT INTO users (user_name, password, email) VALUES ($1, $2, $3) RETURNING *',
-                    [user_name, password, email]);
+                const sql = 'INSERT INTO users (user_name, password, email, avatar) VALUES ($1, $2, $3, (SELECT id FROM avatars ORDER BY random() LIMIT 1)) RETURNING *'
+                const result = await query(sql, [user_name, password, email]);
                 const rows = result.rows ? result.rows : [];
                 res.status(200).json({ user_id: rows[0].user_id, user_name: user_name, email: email })
             } catch (error) {

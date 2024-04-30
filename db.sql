@@ -3,6 +3,7 @@
  create database sends; 
  use sends;
 */
+drop table if exists feedbacks;
 
 drop table if exists replies;
 
@@ -16,39 +17,61 @@ drop table if exists posts;
 
 drop table if exists users;
 
+drop table if exists ratings;
+
 drop table if exists reacts;
 
-drop table if exists profiles;
+drop table if exists avatars;
+
+create table avatars (
+    id serial primary key,
+    img varchar(20) unique not null
+);
+
+insert into avatars (img) values
+('i001'),
+('i002'),
+('i003'),
+('i004'),
+('i005'),
+('i006'),
+('i007'),
+('i008'),
+('i009'),
+('i010');
 
 create table users (
     user_id serial primary key,
     user_name varchar(100) unique not null,
     email varchar(100) unique not null,
-    password varchar(255) not null
+    password varchar(255) not null,
+    avatar int,
+    constraint fk_avatar foreign key(avatar) references avatars(id)
 );
 
-insert into
-    users (user_name, email, password)
-values
-    (
-        'owlincode',
-        'keepsaunawarm@gmail.com',
-        'letthestarsfalldown'
-    );
+INSERT INTO users (user_name, email, password, avatar)
+VALUES (
+    'neko',
+    'neko@foo.com',
+    'password123',
+    (SELECT id FROM avatars ORDER BY random() LIMIT 1)
+);
 
-insert into
-    users (user_name, email, password)
-values
-    (
-        'blackcat',
-        'olutonthevine@gmail.com',
-        'happycoding'
-    );
+INSERT INTO users (user_name, email, password, avatar)
+VALUES (
+    'pupu',
+    'pupu@foo.com',
+    'password123',
+    (SELECT id FROM avatars ORDER BY random() LIMIT 1)
+);
 
-insert into
-    users (user_name, email, password)
-values
-    ('whitecat', 'whitecat@oamk.com', 'funcoding');
+INSERT INTO users (user_name, email, password, avatar)
+VALUES (
+    'koira',
+    'koira@foo.com',
+    'password123',
+    (SELECT id FROM avatars ORDER BY random() LIMIT 1)
+);
 
 create table posts (
     post_id serial primary key,
@@ -158,7 +181,19 @@ create table replies (
     constraint fk_comments foreign key (comment_id) references comments(comment_id),
     user_id int not null,
     constraint fk_users foreign key (user_id) references users(user_id)
-);   
+);
+
+create table ratings (
+    id serial primary key,
+    rate varchar(10) unique
+);
+
+insert into ratings (rate) values
+('01'),
+('02'),
+('03'),
+('04'),
+('05');
 
 create table feedbacks (
     id serial primary key,
@@ -166,10 +201,13 @@ create table feedbacks (
     content text not null,
     saved timestamp default current_timestamp,
     user_id int not null,
-    constraint fk_users foreign key (user_id) references users(user_id)
+    constraint fk_users foreign key (user_id) references users(user_id),
+    rate int,
+    constraint fk_ratings foreign key (rate) references ratings(id)
 );
 
 insert into
-    feedbacks (title, content, user_id)
+    feedbacks (rate, title, content, user_id)
 values
-    ('Test feedback', 'This is a test', 3);
+    (5, 'Test feedback', 'This is a test', 3),
+    (2, 'Test feedback', 'This could be better', 2);
