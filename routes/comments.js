@@ -3,11 +3,12 @@ const { query } = require('../helpers/db.js');
 
 const commentRouter = express.Router()
 
-// Get all comments
+// Get all comments from a post by ID
 commentRouter.get('/posts/:post_id/comments', async (req, res) => {
   const id = req.params.post_id;
   try {
-    const result = await query('SELECT * FROM comments WHERE post_id =' + id );
+    const sql = 'SELECT comments.*, users.user_id, users.avatar, users.user_name FROM comments INNER JOIN users ON comments.user_id=users.user_id WHERE comments.post_id=$1'
+    const result = await query(sql, [id]);
     const rows = result.rows ? result.rows : [];
     res.status(200).json(rows);
   } catch (error) {

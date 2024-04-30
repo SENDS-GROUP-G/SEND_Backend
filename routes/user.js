@@ -44,7 +44,7 @@ userRouter.post("/users/login", async(req,res) => {
                     console.log(bcrypt_res)
                     if (bcrypt_res === true) {
                         const user = result.rows[0];
-                        res.status(200).json({ "user_id": user.user_id,"email": user.email, "user_name": user.user_name })
+                        res.status(200).json({ "user_id": user.user_id,"email": user.email, "user_name": user.user_name, "avatar": user.avatar })
                     } else {
                         res.statusMessage = 'Invalid login';
                         res.status(401).json({ error: 'Invalid login '})
@@ -99,7 +99,7 @@ userRouter.put("/users/password", async(req, res) => {
 userRouter.get("/user/:user_id", async (req, res) => {
     const user_id = Number(req.params.user_id);
     try {
-        const userResult = await query('SELECT user_name, email FROM users WHERE user_id = $1', [user_id]);
+        const userResult = await query('SELECT user_id, user_name, email, avatar FROM users WHERE user_id = $1', [user_id]);
         const postResult = await query('SELECT post_id FROM posts WHERE user_id = $1', [user_id]);
         
         const userData = userResult.rows ? userResult.rows[0] : {};
