@@ -24,8 +24,8 @@ POST http://localhost:3001/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email" : "meocam@foo.com",
-    "password" : "1234567890"
+    "email" : "hello@foo.com",
+    "password" : "123456789"
 }
 
 ### Change password of an account (switching between these two passwords):
@@ -53,7 +53,7 @@ POST http://localhost:3001/posts HTTP/1.1
 Content-Type: application/json
 
 {
-    "user_id": 23,
+    "user_id": 6,
     "title" : "New test post",
     "post_content": "Test from REST Client"
 }
