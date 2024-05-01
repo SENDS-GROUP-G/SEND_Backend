@@ -15,16 +15,33 @@ postRouter.get("/", async (req, res) => {
     }  
   })
 
+// Get a post by ID:
+postRouter.get("/posts/:post_id", async (req, res) => {
+  const post_id = Number(req.params.post_id);
+  try {
+    const result = await query('SELECT * FROM posts WHERE post_id = $1', [post_id]);
+    const rows = result.rows ? result.rows : [];
+    if (rows.length === 1) {
+      res.status(200).json(rows[0]);
+    } else {
+      res.status(404).json({ error: 'Post not found' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // *WORK* Create new post
 postRouter.post("/posts", async(req,res) => {
     const userId = parseInt(req.body.user_id);
     const postContent = req.body.post_content;
     const title = req.body.title;
     try {
-        const result = await query('INSERT INTO posts (user_id, title, post_content) VALUES ($1, $2, $3) RETURNING post_id, title, post_content, user_id',
+        const result = await query('INSERT INTO posts (user_id, title, post_content) VALUES ($1, $2, $3) RETURNING post_id, title, post_content, user_id, (SELECT user_name FROM users WHERE user_id=$1)',
         [userId, title, postContent]);
         const rows = result.rows ? result.rows : [];
-        res.status(200).json({ post_id : rows[0].post_id , user_id: userId, title : title, post_content: postContent })
+        res.status(200).json({ post_id : rows[0].post_id , user_id: userId, user_name: rows[0].user_name, title : title, post_content: postContent })
     } catch (error) {
         console.log(error)
         res.statusMessage = error
