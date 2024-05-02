@@ -25,20 +25,21 @@ drop table if exists avatars;
 
 create table avatars (
     id serial primary key,
-    img varchar(20) unique not null
+    img varchar(20) unique not null,
+    link varchar(255) unique not null
 );
 
-insert into avatars (img) values
-('i001'),
-('i002'),
-('i003'),
-('i004'),
-('i005'),
-('i006'),
-('i007'),
-('i008'),
-('i009'),
-('i010');
+insert into avatars (img, link) values
+('i001', 'https://i.ibb.co/BfkK4vC/1af6d895312312d045c0786302d03bca-tove-jansson-moomin.jpg'),
+('i002', 'https://i.ibb.co/ZHdrMFp/2863757-shikisaber4.jpg'),
+('i003', 'https://i.ibb.co/fv2VdXD/channels4-profile.jpg'),
+('i004', 'https://i.ibb.co/rfKBpm1/download.jpg'),
+('i005', 'https://i.ibb.co/54TytpC/OIP-1.jpg'),
+('i006', 'https://i.ibb.co/h2nfYCh/OIP-2.jpg'),
+('i007', 'https://i.ibb.co/crYjc4Q/OIP.jpg'),
+('i008', 'https://i.ibb.co/n86MTjp/R-1.jpg'),
+('i009', 'https://i.ibb.co/6DzmTKC/R.jpg'),
+('i010', 'https://i.ibb.co/S6J9Ydx/Screenshot-2024-05-02-024455.png');
 
 create table users (
     user_id serial primary key,
