@@ -86,17 +86,18 @@ create table posts (
 insert into
     posts (user_id, title, post_content)
 values
-    (1, 'My first post', 'Hello World!');
+    (1, 'What is Lorem Ipsum?', 'From https://www.lipsum.com/ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.');
 
 insert into
     posts (user_id, title, post_content)
 values
-    (2, 'Test', 'The weather is nice <3');
+    (2, 'History of Coffee', 'From Wikipedia, the free encyclopedia: The history of coffee dates back to centuries of old oral tradition in modern-day Somalia, Ethiopia and Yemen. It was already known in Mecca in the 15th century. Also, in the 15th century, Sufi monasteries in Yemen employed coffee as an aid to concentration during prayers.[1] Coffee later spread to the Levant in the early 16th century; it caused some controversy on whether it was halal in Ottoman and Mamluk society. Coffee arrived in Italy the second half of the 16th century through commercial Mediterranean trade routes, while Central and Eastern Europeans learned of coffee from the Ottomans. By the mid 17th century, it had reached India and the East Indies.
+Coffeepot (cafetière "campanienne"), part of a service, 1836, hard-paste porcelain, Metropolitan Museum of Art Coffee houses were established in Western Europe by the late 17th century, especially in Holland, England, and Germany. One of the earliest cultivations of coffee in the New World was when Gabriel de Clieu brought coffee seedlings to Martinique in 1720. These beans later sprouted 18,680 coffee trees which enabled its spread to other Caribbean islands such as Saint-Domingue and also to Mexico. By 1788, Saint-Domingue supplied half the world coffee');
 
 insert into
     posts (user_id, title, post_content)
 values
-    (2, 'Greeting', 'Explore the world with SENDS!');
+    (2, 'Polaris', 'From Wikipedia, the free encyclopedia: Polaris is a star in the northern circumpolar constellation of Ursa Minor. It is designated α Ursae Minoris (Latinized to Alpha Ursae Minoris) and is commonly called the North Star or Pole Star. With an apparent magnitude that fluctuates around 1.98,[3] it is the brightest star in the constellation and is readily visible to the naked eye at night.[16] The position of the star lies less than 1° away from the north celestial pole, making it the current northern pole star. The stable position of the star in the Northern Sky makes it useful for navigation.');
 
 create table comments (
     comment_id serial primary key,
