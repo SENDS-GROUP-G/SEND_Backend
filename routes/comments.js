@@ -22,7 +22,7 @@ commentRouter.post("/posts/:post_id/comments", async(req, res) => {
         const userId = parseInt(req.body.user_id);
         const postId = parseInt(req.params.post_id);
         const commentContent = req.body.comment_content;
-        const result = await query('INSERT INTO comments (post_id, user_id, comment_content) VALUES ($1, $2, $3) RETURNING comment_id, post_id, user_id, comment_content, (SELECT user_name FROM users WHERE user_id=$1), (SELECT avatars.link FROM avatars INNER JOIN users ON avatars.id=users.avatar WHERE users.user_id=$1)',
+        const result = await query('INSERT INTO comments (post_id, user_id, comment_content) VALUES ($1, $2, $3) RETURNING comment_id, post_id, user_id, comment_content, (SELECT user_name FROM users WHERE user_id=$2), (SELECT avatars.link FROM avatars INNER JOIN users ON avatars.id=users.avatar WHERE users.user_id=$2)',
         [postId, userId, commentContent]);
         const rows = result.rows ? result.rows : [];
         res.status(200).json({ user_name: rows[0].user_name, link: rows[0].link, comment_id : rows[0].comment_id, comment_content: commentContent })
