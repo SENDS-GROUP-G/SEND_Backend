@@ -6,7 +6,7 @@ const postRouter = express.Router()
 // Get all posts
 postRouter.get("/", async (req, res) => {
   try {
-    sql = 'SELECT posts.post_id, posts.title, posts.saved, posts.user_id, users.user_name, users.avatar, posts.post_content FROM posts JOIN users ON posts.user_id = users.user_id';
+    sql = 'SELECT posts.post_id, posts.title, posts.saved, posts.user_id, users.user_name, users.avatar, posts.post_content, avatars.link FROM posts JOIN users ON posts.user_id = users.user_id INNER JOIN avatars ON users.avatar=avatars.id';
     const result = await query(sql);
     const rows = result.rows ? result.rows: [];
     res.status(200).json(rows);
@@ -19,7 +19,7 @@ postRouter.get("/", async (req, res) => {
 postRouter.get("/posts/:post_id", async (req, res) => {
   const post_id = Number(req.params.post_id);
   try {
-    const result = await query('SELECT * FROM posts WHERE post_id = $1', [post_id]);
+    const result = await query('SELECT posts.*, users.user_name, avatars.link FROM posts INNER JOIN users ON posts.user_id=users.user_id INNER JOIN avatars ON users.avatar=avatars.id WHERE post_id = $1', [post_id]);
     const rows = result.rows ? result.rows : [];
     if (rows.length === 1) {
       res.status(200).json(rows[0]);
@@ -38,10 +38,10 @@ postRouter.post("/posts", async(req,res) => {
     const postContent = req.body.post_content;
     const title = req.body.title;
     try {
-        const result = await query('INSERT INTO posts (user_id, title, post_content) VALUES ($1, $2, $3) RETURNING post_id, title, post_content, user_id, (SELECT user_name FROM users WHERE user_id=$1)',
+        const result = await query('INSERT INTO posts (user_id, title, post_content) VALUES ($1, $2, $3) RETURNING post_id, title, post_content, user_id, (SELECT user_name FROM users WHERE user_id=$1), (SELECT avatars.link FROM avatars INNER JOIN users ON avatars.id=users.avatar WHERE users.user_id=$1)',
         [userId, title, postContent]);
         const rows = result.rows ? result.rows : [];
-        res.status(200).json({ post_id : rows[0].post_id , user_id: userId, user_name: rows[0].user_name, title : title, post_content: postContent })
+        res.status(200).json({ post_id : rows[0].post_id , user_id: userId, user_name: rows[0].user_name, title : title, post_content: postContent, link: rows[0].link })
     } catch (error) {
         console.log(error)
         res.statusMessage = error
@@ -62,7 +62,8 @@ postRouter.put('/posts/:post_id', async (req, res) => {
       res.status(200).json({ 
           post_id: rows[0].post_id, 
           title: rows[0].title, 
-          post_content: rows[0].post_content 
+          post_content: rows[0].post_content,
+          saved: rows[0].saved
         })
   } catch (error) {
       console.log( error )

@@ -15,7 +15,7 @@ userRouter.post("/register", async (req, res) => {
                 const sql = 'INSERT INTO users (user_name, password, email, avatar) VALUES ($1, $2, $3, (SELECT id FROM avatars ORDER BY random() LIMIT 1)) RETURNING *'
                 const result = await query(sql, [user_name, password, email]);
                 const rows = result.rows ? result.rows : [];
-                res.status(200).json({ user_id: rows[0].user_id, user_name: user_name, email: email })
+                res.status(200).json({ user_id: rows[0].user_id, user_name: user_name, email: email, avatar: rows[0].avatar })
             } catch (error) {
                 console.log(error)
                 res.statusMessage = error
@@ -32,7 +32,7 @@ userRouter.post("/register", async (req, res) => {
 userRouter.post("/users/login", async(req,res) => {
     console.log(req.body);
     try {
-        const sql = "SELECT * FROM users WHERE email=$1";
+        const sql = "SELECT users.*, avatars.link FROM users INNER JOIN avatars ON users.avatar=avatars.id WHERE email=$1";
         const result = await query(sql,[req.body.email]);
         console.log(result.rowCount)
         console.log(req.body.password);
@@ -44,7 +44,7 @@ userRouter.post("/users/login", async(req,res) => {
                     console.log(bcrypt_res)
                     if (bcrypt_res === true) {
                         const user = result.rows[0];
-                        res.status(200).json({ "user_id": user.user_id,"email": user.email, "user_name": user.user_name, "avatar": user.avatar })
+                        res.status(200).json({ "user_id": user.user_id,"email": user.email, "user_name": user.user_name, "avatar": user.avatar, "link": user.link })
                     } else {
                         res.statusMessage = 'Invalid login';
                         res.status(401).json({ error: 'Invalid login '})
@@ -99,7 +99,7 @@ userRouter.put("/users/password", async(req, res) => {
 userRouter.get("/user/:user_id", async (req, res) => {
     const user_id = Number(req.params.user_id);
     try {
-        const userResult = await query('SELECT user_id, user_name, email, avatar FROM users WHERE user_id = $1', [user_id]);
+        const userResult = await query('SELECT users.*, avatars.link FROM users INNER JOIN avatars ON users.avatar=avatars.id WHERE user_id = $1', [user_id]);
         const postResult = await query('SELECT post_id FROM posts WHERE user_id = $1', [user_id]);
         
         const userData = userResult.rows ? userResult.rows[0] : {};

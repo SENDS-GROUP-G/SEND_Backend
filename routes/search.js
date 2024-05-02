@@ -18,7 +18,7 @@ searchRouter.get('/search/posts/:title', async (req, res) => {
 searchRouter.get('/search/users/:user_name', async (req, res) => {
     const user_name = req.params.user_name.toString();
     try {
-        const result = await query('SELECT user_id, user_name, email, avatar FROM users WHERE user_name ILIKE $1', [user_name + '%']);
+        const result = await query('SELECT users.*, avatars.link FROM users INNER JOIN avatars ON users.avatar=avatars.id WHERE user_name ILIKE $1', [user_name + '%']);
         const rows = result.rows ? result.rows : [];
         res.status(200).json(rows);
     } catch (error) {
